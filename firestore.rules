@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidPortalState(data) {
+      return data.keys().hasAll([
+        'employees',
+        'websites',
+        'media',
+        'announcements',
+        'adminPassword',
+        'privateWebsitesPassword',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'employees',
+        'websites',
+        'media',
+        'announcements',
+        'adminPassword',
+        'privateWebsitesPassword',
+        'updatedAt'
+      ]) &&
+      data.employees is list && data.employees.size() <= 500 &&
+      data.websites is list && data.websites.size() <= 500 &&
+      data.media is list && data.media.size() <= 500 &&
+      data.announcements is list && data.announcements.size() <= 500 &&
+      data.adminPassword is string && data.adminPassword.size() >= 1 && data.adminPassword.size() <= 128 &&
+      data.privateWebsitesPassword is string && data.privateWebsitesPassword.size() >= 1 && data.privateWebsitesPassword.size() <= 128 &&
+      data.updatedAt is number && data.updatedAt >= 0;
+    }
+
+    // Connection test path
+    match /test/{docId} {
+      allow get: if isValidId(docId);
+    }
+
+    // Global real-time corporate portal state
+    match /portal_sync/{docId} {
+      allow get: if docId == 'global' && isValidId(docId);
+      allow create, update: if docId == 'global' && isValidId(docId) && isValidPortalState(incoming());
+    }
+  }
+}

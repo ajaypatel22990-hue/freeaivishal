@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "PortalState": {
+      "title": "PortalState",
+      "description": "Real-time global corporate portal state containing employees, websites, media, announcements, and passwords.",
+      "type": "object",
+      "properties": {
+        "employees": {
+          "type": "array",
+          "description": "List of company employees"
+        },
+        "websites": {
+          "type": "array",
+          "description": "List of public and private company websites"
+        },
+        "media": {
+          "type": "array",
+          "description": "List of company media gallery items"
+        },
+        "announcements": {
+          "type": "array",
+          "description": "List of company announcements"
+        },
+        "adminPassword": {
+          "type": "string",
+          "description": "Admin panel password",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "privateWebsitesPassword": {
+          "type": "string",
+          "description": "Private secret websites password",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "updatedAt": {
+          "type": "number",
+          "description": "Timestamp of last update in milliseconds"
+        }
+      },
+      "required": [
+        "employees",
+        "websites",
+        "media",
+        "announcements",
+        "adminPassword",
+        "privateWebsitesPassword",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/portal_sync/{docId}": {
+      "schema": {
+        "$ref": "#/entities/PortalState"
+      },
+      "description": "Single global real-time sync state document (docId = 'global') for instant multi-device updates."
+    }
+  }
+}

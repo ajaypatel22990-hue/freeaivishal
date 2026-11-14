@@ -1,0 +1,16 @@
+{
+  "name": "फ्री एआई विशाल कंपनी | Free AI Vishal Company Portal",
+  "short_name": "FAV Company",
+  "description": "फ्री एआई विशाल कंपनी का आधिकारिक कॉर्पोरेट पोर्टल। सीईओ: विशाल पटेल",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

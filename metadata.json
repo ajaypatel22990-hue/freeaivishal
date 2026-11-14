@@ -1,0 +1,6 @@
+{
+  "name": "फ्री एआई विशाल कंपनी | Free AI Vishal Company Portal",
+  "description": "Official enterprise portal for Free AI Vishal Company. Features employee management, secure sign-in with roll number and mobile number, admin dashboard, linked company websites, photo & video gallery manager, and AI assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
