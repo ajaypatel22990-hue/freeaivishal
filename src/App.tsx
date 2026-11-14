@@ -13,6 +13,11 @@ import { JobApplicationModal } from './components/JobApplicationModal';
 import { PrivateWebsitesModal } from './components/PrivateWebsitesModal';
 import { CustomerCareModal } from './components/CustomerCareModal';
 import { AutoSeoManager } from './components/AutoSeoManager';
+import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
+import { TermsModal } from './components/TermsModal';
+import { DisclaimerModal } from './components/DisclaimerModal';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { AdSenseSlot } from './components/AdSenseSlot';
 import { INITIAL_EMPLOYEES, INITIAL_WEBSITES, INITIAL_MEDIA, INITIAL_ANNOUNCEMENTS } from './data/initialData';
 import { Employee, CompanyWebsite, MediaItem, Announcement, AuthState } from './types';
 import { Language, translations } from './translations';
@@ -69,6 +74,10 @@ export default function App() {
   const [auth, setAuth] = useState<AuthState>(() => {
     return safeStorage.getItem('fav_auth', { role: 'guest' });
   });
+
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
 
   const [isEmployeeLoginOpen, setIsEmployeeLoginOpen] = useState(false);
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
@@ -460,6 +469,8 @@ export default function App() {
         )}
       </main>
 
+      <AdSenseSlot language={language} />
+
       <footer className="bg-slate-900 text-white border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8 mt-20">
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
@@ -485,6 +496,15 @@ export default function App() {
               </button>
               <button type="button" onClick={() => setCurrentTab('employees')} className="hover:text-white transition-colors">
                 {translations[language].directory}
+              </button>
+              <button type="button" onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors font-bold text-indigo-400">
+                {language === 'en' ? 'Privacy Policy' : 'प्राइवेसी पॉलिसी'}
+              </button>
+              <button type="button" onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors font-bold text-indigo-400">
+                {language === 'en' ? 'Terms & Conditions' : 'नियम और शर्तें'}
+              </button>
+              <button type="button" onClick={() => setIsDisclaimerOpen(true)} className="hover:text-white transition-colors font-bold text-indigo-400">
+                {language === 'en' ? 'Disclaimer' : 'डिस्क्लेमर'}
               </button>
             </div>
           </div>
@@ -557,6 +577,29 @@ export default function App() {
       <CustomerCareModal
         isOpen={isCustomerCareOpen}
         onClose={() => setIsCustomerCareOpen(false)}
+        language={language}
+      />
+
+      <PrivacyPolicyModal
+        isOpen={isPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
+        language={language}
+      />
+
+      <TermsModal
+        isOpen={isTermsOpen}
+        onClose={() => setIsTermsOpen(false)}
+        language={language}
+      />
+
+      <DisclaimerModal
+        isOpen={isDisclaimerOpen}
+        onClose={() => setIsDisclaimerOpen(false)}
+        language={language}
+      />
+
+      <CookieConsentBanner
+        onOpenPrivacyPolicy={() => setIsPrivacyOpen(true)}
         language={language}
       />
 

@@ -3,6 +3,7 @@ import { Globe, Search, ExternalLink, CheckCircle2, Lock, Unlock, ShieldAlert, E
 import { CompanyWebsite, UserRole } from '../types';
 import { Language, translations } from '../translations';
 import { useToast } from './Toast';
+import { AdSenseSlot } from './AdSenseSlot';
 
 interface WebsitesViewProps {
   websites: CompanyWebsite[];
@@ -147,6 +148,8 @@ export const WebsitesView: React.FC<WebsitesViewProps> = ({
           )}
         </div>
       </div>
+
+      <AdSenseSlot language={language} slotName="Websites Top Sponsor Ad" />
 
       {/* UNLOCKED PRIVATE / SECRET WEBSITES VAULT SECTION */}
       {isPrivateUnlocked && (
@@ -355,6 +358,8 @@ export const WebsitesView: React.FC<WebsitesViewProps> = ({
           </button>
         </div>
       )}
+
+      <AdSenseSlot language={language} slotName="Websites Bottom Sponsor Ad" />
 
       {/* PRIVATE WEBSITES PASSWORD MODAL */}
       {isPasswordModalOpen && (

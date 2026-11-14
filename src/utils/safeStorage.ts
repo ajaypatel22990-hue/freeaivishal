@@ -2,7 +2,7 @@
  * Safe Storage Utility:
  * Prevents QuotaExceededError and DOMException crashes when handling
  * large base64 photos, mobile camera uploads, or videos.
- * Guarantees that React state updates, string keys, and sync never crash.
+ * Guarantees that React state updates, string keys, and media persistence never delete photos or videos.
  */
 export const safeStorage = {
   setItem: (key: string, value: any): boolean => {
@@ -11,15 +11,18 @@ export const safeStorage = {
       localStorage.setItem(key, str);
       return true;
     } catch (err) {
-      console.warn(`[SafeStorage] LocalStorage quota reached for ${key}. Falling back to in-memory state.`, err);
+      console.warn(`[SafeStorage] LocalStorage quota reached for ${key}. Optimizing storage to preserve media...`, err);
       try {
-        if (key !== 'fav_media') {
-          localStorage.removeItem('fav_media');
-          localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
-          return true;
-        }
-      } catch {}
-      return false;
+        // Clear non-essential cached keys first, NEVER remove fav_media
+        localStorage.removeItem('fav_announcements');
+        localStorage.removeItem('fav_local_modified');
+        const str = typeof value === 'string' ? value : JSON.stringify(value);
+        localStorage.setItem(key, str);
+        return true;
+      } catch (innerErr) {
+        console.error('[SafeStorage] Failed to save even after cache clearance:', innerErr);
+        return false;
+      }
     }
   },
 
@@ -46,7 +49,9 @@ export const safeStorage = {
 
   removeItem: (key: string): void => {
     try {
-      localStorage.removeItem(key);
+      if (key !== 'fav_media') {
+        localStorage.removeItem(key);
+      }
     } catch {}
   },
 };
